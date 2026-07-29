@@ -184,39 +184,52 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         final city = cities[index];
         final isFavorite = ref.watch(searchProvider.notifier).isFavorite(city);
 
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 6.0),
-          child: GlassCard(
-            padding: const EdgeInsets.all(4.0),
-            child: ListTile(
-              leading: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: isFavoriteList ? Colors.amber.withOpacity(0.2) : Colors.white10,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  isFavoriteList ? Icons.star : Icons.history,
-                  color: isFavoriteList ? Colors.amber : Colors.white54,
-                  size: 20,
+        return TweenAnimationBuilder<double>(
+          duration: Duration(milliseconds: 400 + (index * 100)),
+          curve: Curves.easeOutCubic,
+          tween: Tween<double>(begin: 0.0, end: 1.0),
+          builder: (context, value, child) {
+            return Transform.translate(
+              offset: Offset(0, 50 * (1 - value)),
+              child: Opacity(
+                opacity: value,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 6.0),
+                  child: GlassCard(
+                    padding: const EdgeInsets.all(4.0),
+                    child: ListTile(
+                      leading: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: isFavoriteList ? Colors.amber.withOpacity(0.2) : Colors.white10,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          isFavoriteList ? Icons.star : Icons.history,
+                          color: isFavoriteList ? Colors.amber : Colors.white54,
+                          size: 20,
+                        ),
+                      ),
+                      title: Text(
+                        city.cityName,
+                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                      trailing: IconButton(
+                        icon: Icon(
+                          isFavorite ? Icons.favorite : Icons.favorite_border,
+                          color: isFavorite ? Colors.redAccent : Colors.white54,
+                        ),
+                        onPressed: () {
+                          ref.read(searchProvider.notifier).toggleFavoriteCity(city);
+                        },
+                      ),
+                      onTap: () => _onCitySelected(city.cityName),
+                    ),
+                  ),
                 ),
               ),
-              title: Text(
-                city.cityName,
-                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-              trailing: IconButton(
-                icon: Icon(
-                  isFavorite ? Icons.favorite : Icons.favorite_border,
-                  color: isFavorite ? Colors.redAccent : Colors.white54,
-                ),
-                onPressed: () {
-                  ref.read(searchProvider.notifier).toggleFavoriteCity(city);
-                },
-              ),
-              onTap: () => _onCitySelected(city.cityName),
-            ),
-          ),
+            );
+          },
         );
       },
     );

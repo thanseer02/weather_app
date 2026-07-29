@@ -18,11 +18,45 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: '/search',
-      builder: (context, state) => const SearchScreen(),
+      pageBuilder: (context, state) {
+        return CustomTransitionPage(
+          key: state.pageKey,
+          child: const SearchScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return SlideTransition(
+              position: animation.drive(Tween(
+                begin: const Offset(0.0, 1.0),
+                end: Offset.zero,
+              ).chain(CurveTween(curve: Curves.easeOutCubic))),
+              child: FadeTransition(
+                opacity: animation,
+                child: child,
+              ),
+            );
+          },
+        );
+      },
     ),
     GoRoute(
       path: '/settings',
-      builder: (context, state) => const SettingsScreen(),
+      pageBuilder: (context, state) {
+        return CustomTransitionPage(
+          key: state.pageKey,
+          child: const SettingsScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: ScaleTransition(
+                scale: animation.drive(Tween(
+                  begin: 0.95,
+                  end: 1.0,
+                ).chain(CurveTween(curve: Curves.easeOutCubic))),
+                child: child,
+              ),
+            );
+          },
+        );
+      },
     ),
   ],
 );

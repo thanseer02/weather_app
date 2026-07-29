@@ -46,7 +46,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.search, color: Colors.white),
+          icon: const Hero(
+            tag: 'search_bar',
+            child: Icon(Icons.search, color: Colors.white),
+          ),
           onPressed: () {
             context.push('/search');
           },
@@ -81,8 +84,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ],
       ),
-      body: weatherAsync.when(
-        data: (weatherState) {
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 600),
+        switchInCurve: Curves.easeOutCubic,
+        switchOutCurve: Curves.easeInCubic,
+        transitionBuilder: (child, animation) {
+          return FadeTransition(
+            opacity: animation,
+            child: ScaleTransition(
+              scale: animation.drive(Tween(begin: 0.95, end: 1.0)),
+              child: child,
+            ),
+          );
+        },
+        child: weatherAsync.when(
+          data: (weatherState) {
           final condition = _mapIconToCondition(weatherState.current.iconCode);
           return AnimatedWeatherBg(
             condition: condition,
