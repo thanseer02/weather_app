@@ -46,6 +46,8 @@ dependencies:
   dynamic_color: ^1.8.1
   flutter_dotenv: ^6.0.1
   google_fonts: ^8.2.0
+  geolocator: ^14.0.3
+  geocoding: ^4.0.0
 
 dev_dependencies:
   flutter_test:
