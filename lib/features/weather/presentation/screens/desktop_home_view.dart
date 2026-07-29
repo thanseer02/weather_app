@@ -14,6 +14,9 @@ import '../widgets/aqi_card_view.dart';
 import '../widgets/wind_compass_view.dart';
 import '../../../../core/widgets/glass_card.dart';
 
+import '../../../../core/services/platform_service.dart';
+import 'package:window_manager/window_manager.dart';
+
 class DesktopHomeView extends ConsumerStatefulWidget {
   const DesktopHomeView({super.key});
 
@@ -25,9 +28,9 @@ class _DesktopHomeViewState extends ConsumerState<DesktopHomeView> {
   int _selectedIndex = 0;
   final MultiSplitViewController _splitController = MultiSplitViewController(
     areas: [
-      Area(weight: 0.3, minimalWeight: 0.25),
-      Area(weight: 0.4, minimalWeight: 0.3),
-      Area(weight: 0.3, minimalWeight: 0.2),
+      Area(flex: 0.3, min: 0.25),
+      Area(flex: 0.4, min: 0.3),
+      Area(flex: 0.3, min: 0.2),
     ],
   );
 
@@ -85,25 +88,28 @@ class _DesktopHomeViewState extends ConsumerState<DesktopHomeView> {
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
                           children: [
-                            // Desktop Toolbar
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    const Icon(Icons.location_on, color: Colors.white),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      locationAsync.valueOrNull?.cityName ?? 'Loading...',
-                                      style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.refresh, color: Colors.white),
-                                  onPressed: () => ref.read(weatherProvider.notifier).refresh(),
-                                ),
-                              ],
+                            // Desktop Toolbar inside DragToMoveArea for macOS window dragging
+                            DragToMoveArea(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      if (PlatformService.isMacOS) const SizedBox(width: 80), // Prevent traffic light overlap
+                                      const Icon(Icons.location_on, color: Colors.white),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        locationAsync.valueOrNull?.cityName ?? 'Loading...',
+                                        style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.refresh, color: Colors.white),
+                                    onPressed: () => ref.read(weatherProvider.notifier).refresh(),
+                                  ),
+                                ],
+                              ),
                             ),
                             const SizedBox(height: 16),
                             // Multi Split View
@@ -116,16 +122,48 @@ class _DesktopHomeViewState extends ConsumerState<DesktopHomeView> {
                                     highlightedColor: Colors.white.withValues(alpha: 0.3),
                                   ),
                                 ),
-                                child: MultiSplitView(
-                                  controller: _splitController,
-                                  children: [
-                                    // Panel 1: Weather Dashboard
-                                    _buildPanel1(weatherState.current),
-                                    // Panel 2: Charts & Forecast
-                                    _buildPanel2(weatherState.forecast, weatherState.current),
-                                    // Panel 3: Map / Daily
-                                    _buildPanel3(weatherState.forecast),
-                                  ],
+                                child: GestureDetector(
+                                  onSecondaryTapUp: (details) {
+                                    final position = details.globalPosition;
+                                    showMenu(
+                                      context: context,
+                                      position: RelativeRect.fromLTRB(position.dx, position.dy, position.dx, position.dy),
+                                      color: Colors.grey.shade900.withValues(alpha: 0.9),
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                      items: [
+                                        PopupMenuItem(
+                                          child: const Row(
+                                            children: [
+                                              Icon(Icons.refresh, color: Colors.white70, size: 16),
+                                              SizedBox(width: 8),
+                                              Text('Refresh', style: TextStyle(color: Colors.white, fontSize: 13)),
+                                            ],
+                                          ),
+                                          onTap: () => ref.read(weatherProvider.notifier).refresh(),
+                                        ),
+                                        PopupMenuItem(
+                                          child: const Row(
+                                            children: [
+                                              Icon(Icons.settings, color: Colors.white70, size: 16),
+                                              SizedBox(width: 8),
+                                              Text('Settings', style: TextStyle(color: Colors.white, fontSize: 13)),
+                                            ],
+                                          ),
+                                          onTap: () => context.push('/settings'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                  child: MultiSplitView(
+                                    controller: _splitController,
+                                    builder: (context, area) {
+                                      final index = area.index;
+                                      if (index == 0) return _buildPanel1(weatherState.current);
+                                      if (index == 1) return _buildPanel2(weatherState.forecast, weatherState.current);
+                                      if (index == 2) return _buildPanel3(weatherState.forecast);
+                                      return const SizedBox();
+                                    },
+                                  ),
                                 ),
                               ),
                             ),
