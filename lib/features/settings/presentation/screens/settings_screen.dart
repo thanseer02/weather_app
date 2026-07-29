@@ -10,7 +10,6 @@ class SettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settings = ref.watch(settingsProvider);
     final notifier = ref.read(settingsProvider.notifier);
 
     return Scaffold(
@@ -50,118 +49,147 @@ class SettingsScreen extends ConsumerWidget {
                   _buildSectionHeader('Appearance'),
                   _buildAnimatedSection(
                     index: 0,
-                    child: GlassCard(
-                      padding: const EdgeInsets.all(8),
-                      child: Column(
-                        children: [
-                          _buildDropdownTile<ThemeModeType>(
-                            title: 'Theme',
-                            icon: Icons.palette,
-                            value: settings.themeMode,
-                            items: ThemeModeType.values,
-                            onChanged: (val) {
-                              if (val != null) notifier.updateSettings(settings.copyWith(themeMode: val));
-                            },
-                            displayString: (val) => val.name.toUpperCase(),
-                          ),
-                          _buildDropdownTile<AnimationQuality>(
-                            title: 'Animation Quality',
-                            icon: Icons.animation,
-                            value: settings.animationQuality,
-                            items: AnimationQuality.values,
-                            onChanged: (val) {
-                              if (val != null) notifier.updateSettings(settings.copyWith(animationQuality: val));
-                            },
-                            displayString: (val) => val.name.toUpperCase(),
-                          ),
-                        ],
-                      ),
-                    ),
+                    child: Consumer(builder: (context, ref, _) {
+                      final themeMode = ref.watch(settingsProvider.select((s) => s.themeMode));
+                      final animationQuality = ref.watch(settingsProvider.select((s) => s.animationQuality));
+                      return GlassCard(
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          children: [
+                            _buildDropdownTile<ThemeModeType>(
+                              title: 'Theme',
+                              icon: Icons.palette,
+                              value: themeMode,
+                              items: ThemeModeType.values,
+                              onChanged: (val) {
+                                if (val != null) {
+                                  final s = ref.read(settingsProvider);
+                                  notifier.updateSettings(s.copyWith(themeMode: val));
+                                }
+                              },
+                              displayString: (val) => val.name.toUpperCase(),
+                            ),
+                            _buildDropdownTile<AnimationQuality>(
+                              title: 'Animation Quality',
+                              icon: Icons.animation,
+                              value: animationQuality,
+                              items: AnimationQuality.values,
+                              onChanged: (val) {
+                                if (val != null) {
+                                  final s = ref.read(settingsProvider);
+                                  notifier.updateSettings(s.copyWith(animationQuality: val));
+                                }
+                              },
+                              displayString: (val) => val.name.toUpperCase(),
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
                   ),
 
                   const SizedBox(height: 32),
                   _buildSectionHeader('Units'),
                   _buildAnimatedSection(
                     index: 1,
-                    child: GlassCard(
-                      padding: const EdgeInsets.all(8),
-                      child: Column(
-                        children: [
-                          _buildDropdownTile<TemperatureUnit>(
-                            title: 'Temperature Unit',
-                            icon: Icons.thermostat,
-                            value: settings.temperatureUnit,
-                            items: TemperatureUnit.values,
-                            onChanged: (val) {
-                              if (val != null) notifier.updateSettings(settings.copyWith(temperatureUnit: val));
-                            },
-                            displayString: (val) => val.name.toUpperCase(),
-                          ),
-                          _buildDropdownTile<WindUnit>(
-                            title: 'Wind Speed Unit',
-                            icon: Icons.air,
-                            value: settings.windUnit,
-                            items: WindUnit.values,
-                            onChanged: (val) {
-                              if (val != null) notifier.updateSettings(settings.copyWith(windUnit: val));
-                            },
-                            displayString: (val) => val.name.toUpperCase(),
-                          ),
-                          _buildDropdownTile<PressureUnit>(
-                            title: 'Pressure Unit',
-                            icon: Icons.speed,
-                            value: settings.pressureUnit,
-                            items: PressureUnit.values,
-                            onChanged: (val) {
-                              if (val != null) notifier.updateSettings(settings.copyWith(pressureUnit: val));
-                            },
-                            displayString: (val) => val.name.toUpperCase(),
-                          ),
-                        ],
-                      ),
-                    ),
+                    child: Consumer(builder: (context, ref, _) {
+                      final temperatureUnit = ref.watch(settingsProvider.select((s) => s.temperatureUnit));
+                      final windUnit = ref.watch(settingsProvider.select((s) => s.windUnit));
+                      final pressureUnit = ref.watch(settingsProvider.select((s) => s.pressureUnit));
+                      
+                      return GlassCard(
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          children: [
+                            _buildDropdownTile<TemperatureUnit>(
+                              title: 'Temperature Unit',
+                              icon: Icons.thermostat,
+                              value: temperatureUnit,
+                              items: TemperatureUnit.values,
+                              onChanged: (val) {
+                                if (val != null) {
+                                  final s = ref.read(settingsProvider);
+                                  notifier.updateSettings(s.copyWith(temperatureUnit: val));
+                                }
+                              },
+                              displayString: (val) => val.name.toUpperCase(),
+                            ),
+                            _buildDropdownTile<WindUnit>(
+                              title: 'Wind Speed Unit',
+                              icon: Icons.air,
+                              value: windUnit,
+                              items: WindUnit.values,
+                              onChanged: (val) {
+                                if (val != null) {
+                                  final s = ref.read(settingsProvider);
+                                  notifier.updateSettings(s.copyWith(windUnit: val));
+                                }
+                              },
+                              displayString: (val) => val.name.toUpperCase(),
+                            ),
+                            _buildDropdownTile<PressureUnit>(
+                              title: 'Pressure Unit',
+                              icon: Icons.speed,
+                              value: pressureUnit,
+                              items: PressureUnit.values,
+                              onChanged: (val) {
+                                if (val != null) {
+                                  final s = ref.read(settingsProvider);
+                                  notifier.updateSettings(s.copyWith(pressureUnit: val));
+                                }
+                              },
+                              displayString: (val) => val.name.toUpperCase(),
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
                   ),
 
                   const SizedBox(height: 32),
                   _buildSectionHeader('App Settings'),
                   _buildAnimatedSection(
                     index: 2,
-                    child: GlassCard(
-                      padding: const EdgeInsets.all(8),
-                      child: Column(
-                        children: [
-                          SwitchListTile(
-                            title: const Text('Push Notifications', style: TextStyle(color: Colors.white)),
-                            secondary: const Icon(Icons.notifications, color: Colors.white70),
-                            activeThumbColor: Colors.blueAccent,
-                            value: settings.notificationsEnabled,
-                            onChanged: (val) {
-                              notifier.updateSettings(settings.copyWith(notificationsEnabled: val));
-                            },
-                          ),
-                          ListTile(
-                            leading: const Icon(Icons.language, color: Colors.white70),
-                            title: const Text('Language', style: TextStyle(color: Colors.white)),
-                            trailing: const Text('EN', style: TextStyle(color: Colors.white54)),
-                            onTap: () {
-                              // Future: Language Picker
-                            },
-                          ),
-                          ListTile(
-                            leading: const Icon(Icons.cleaning_services, color: Colors.white70),
-                            title: const Text('Clear Cache', style: TextStyle(color: Colors.white)),
-                            onTap: () async {
-                              await notifier.clearCache();
-                              if (context.mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Cache cleared successfully!')),
-                                );
-                              }
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
+                    child: Consumer(builder: (context, ref, _) {
+                      final notificationsEnabled = ref.watch(settingsProvider.select((s) => s.notificationsEnabled));
+                      return GlassCard(
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          children: [
+                            SwitchListTile(
+                              title: const Text('Push Notifications', style: TextStyle(color: Colors.white)),
+                              secondary: const Icon(Icons.notifications, color: Colors.white70),
+                              activeColor: Colors.blueAccent,
+                              value: notificationsEnabled,
+                              onChanged: (val) {
+                                final s = ref.read(settingsProvider);
+                                notifier.updateSettings(s.copyWith(notificationsEnabled: val));
+                              },
+                            ),
+                            ListTile(
+                              leading: const Icon(Icons.language, color: Colors.white70),
+                              title: const Text('Language', style: TextStyle(color: Colors.white)),
+                              trailing: const Text('EN', style: TextStyle(color: Colors.white54)),
+                              onTap: () {
+                                // Future: Language Picker
+                              },
+                            ),
+                            ListTile(
+                              leading: const Icon(Icons.cleaning_services, color: Colors.white70),
+                              title: const Text('Clear Cache', style: TextStyle(color: Colors.white)),
+                              onTap: () async {
+                                await notifier.clearCache();
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text('Cache cleared successfully!')),
+                                  );
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
                   ),
 
                   const SizedBox(height: 32),
