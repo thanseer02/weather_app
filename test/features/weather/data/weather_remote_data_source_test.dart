@@ -5,15 +5,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:weather/features/weather/data/datasources/weather_remote_data_source.dart';
 
-import '../../../../helpers/test_helpers.dart';
+import '../../../helpers/test_helpers.dart';
 
 void main() {
   late WeatherRemoteDataSourceImpl dataSource;
+  late MockApiClient mockApiClient;
   late MockDio mockDio;
 
   setUp(() {
+    mockApiClient = MockApiClient();
     mockDio = MockDio();
-    dataSource = WeatherRemoteDataSourceImpl(mockDio);
+    when(() => mockApiClient.dio).thenReturn(mockDio);
+    dataSource = WeatherRemoteDataSourceImpl(apiClient: mockApiClient);
   });
 
   group('WeatherRemoteDataSource', () {
@@ -38,7 +41,7 @@ void main() {
 
       // assert
       verify(() => mockDio.get(
-        '/weather',
+        'weather',
         queryParameters: {
           'lat': tLat,
           'lon': tLon,
