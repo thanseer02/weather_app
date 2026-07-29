@@ -5,6 +5,7 @@ import 'storage_service.dart';
 import 'notification_service.dart';
 import 'widget_service.dart';
 import '../../features/weather/domain/repositories/weather_repository.dart';
+import 'platform_service.dart';
 
 @pragma('vm:entry-point')
 void callbackDispatcher() {
@@ -95,6 +96,8 @@ class BackgroundTaskService {
   static const String weatherCheckTask = 'weather_check_task';
 
   static Future<void> init() async {
+    if (!PlatformService.isMobile) return;
+
     await Workmanager().initialize(
       callbackDispatcher,
       isInDebugMode: false,
@@ -102,6 +105,8 @@ class BackgroundTaskService {
   }
 
   static Future<void> scheduleWeatherChecks() async {
+    if (!PlatformService.isMobile) return;
+
     // Schedule a periodic task every 3 hours. 
     // Note: Android minimum periodic interval is 15 minutes.
     await Workmanager().registerPeriodicTask(

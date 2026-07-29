@@ -1,5 +1,6 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:logger/logger.dart';
+import 'platform_service.dart';
 
 class NotificationService {
   static final NotificationService _instance = NotificationService._internal();
@@ -10,6 +11,8 @@ class NotificationService {
   final Logger _logger = Logger();
 
   Future<void> init() async {
+    if (!PlatformService.isMobile) return;
+
     const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
     
     const DarwinInitializationSettings initializationSettingsIOS = DarwinInitializationSettings(
@@ -36,6 +39,8 @@ class NotificationService {
   }
 
   Future<void> showWeatherAlert({required int id, required String title, required String body}) async {
+    if (!PlatformService.isMobile) return;
+
     const AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'weather_alerts_channel',
       'Weather Alerts',

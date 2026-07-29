@@ -1,6 +1,7 @@
 import 'package:home_widget/home_widget.dart';
 import '../../features/weather/domain/entities/weather_entity.dart';
 import 'package:logger/logger.dart';
+import 'platform_service.dart';
 
 class WidgetService {
   static const String appGroupId = 'group.com.example.weather'; // iOS App Group
@@ -9,13 +10,17 @@ class WidgetService {
   final Logger _logger = Logger();
 
   Future<void> init() async {
-    await HomeWidget.setAppGroupId(appGroupId);
+    if (PlatformService.isMobile) {
+      await HomeWidget.setAppGroupId(appGroupId);
+    }
   }
 
   Future<void> updateWidgetData({
     required WeatherEntity weather,
     required String cityName,
   }) async {
+    if (!PlatformService.isMobile) return;
+
     try {
       await HomeWidget.saveWidgetData('temperature', '${weather.temperature.round()}°');
       await HomeWidget.saveWidgetData('cityName', cityName);
