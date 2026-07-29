@@ -10,6 +10,8 @@ import '../../features/weather/data/datasources/weather_local_data_source.dart';
 import '../../features/weather/data/datasources/weather_remote_data_source.dart';
 import '../../features/weather/data/repositories/weather_repository_impl.dart';
 import '../../features/weather/domain/repositories/weather_repository.dart';
+import '../../features/weather/domain/usecases/get_current_weather_usecase.dart';
+import '../../features/weather/domain/usecases/get_forecast_usecase.dart';
 
 final sl = GetIt.instance;
 
@@ -43,4 +45,8 @@ Future<void> setupLocator() async {
             remoteDataSource: sl(),
             localDataSource: sl(),
           ));
+
+  // UseCases
+  sl.registerLazySingleton(() => GetCurrentWeatherUseCase(sl()));
+  sl.registerLazySingleton(() => GetForecastUseCase(sl()));
 }

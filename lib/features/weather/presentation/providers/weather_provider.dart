@@ -2,7 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:equatable/equatable.dart';
 import '../../../../core/di/dependency_injection.dart';
 import '../../domain/entities/weather_entity.dart';
-import '../../domain/repositories/weather_repository.dart';
+import '../../domain/usecases/get_current_weather_usecase.dart';
+import '../../domain/usecases/get_forecast_usecase.dart';
 import 'location_provider.dart';
 import '../../../../core/services/storage_service.dart';
 import '../../../../core/services/widget_service.dart';
@@ -22,11 +23,13 @@ final weatherProvider = AsyncNotifierProvider<WeatherNotifier, WeatherState>(
 );
 
 class WeatherNotifier extends AsyncNotifier<WeatherState> {
-  late final WeatherRepository _repository;
+  late final GetCurrentWeatherUseCase _getCurrentWeather;
+  late final GetForecastUseCase _getForecast;
 
   @override
   Future<WeatherState> build() async {
-    _repository = sl<WeatherRepository>();
+    _getCurrentWeather = sl<GetCurrentWeatherUseCase>();
+    _getForecast = sl<GetForecastUseCase>();
     
     // Automatically watch location changes. If location updates, this will re-run.
     final location = await ref.watch(locationProvider.future);
@@ -35,8 +38,8 @@ class WeatherNotifier extends AsyncNotifier<WeatherState> {
   }
 
   Future<WeatherState> _fetchWeather(double lat, double lon) async {
-    final weatherResult = await _repository.getCurrentWeather(lat, lon);
-    final forecastResult = await _repository.getForecast(lat, lon);
+    final weatherResult = await _getCurrentWeather(lat, lon);
+    final forecastResult = await _getForecast(lat, lon);
 
     return weatherResult.fold(
       (failure) => throw Exception(failure.message),

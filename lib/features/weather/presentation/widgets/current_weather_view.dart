@@ -10,8 +10,11 @@ class CurrentWeatherView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
+    return Semantics(
+      label: 'Current weather condition is ${weather.description}, temperature ${weather.temperature.round()} degrees',
+      value: 'High of ${weather.tempMax.round()} and low of ${weather.tempMin.round()}',
+      child: Column(
+        children: [
         CachedNetworkImage(
           imageUrl: 'https://openweathermap.org/img/wn/${weather.iconCode}@4x.png',
           width: 150,
@@ -44,6 +47,6 @@ class CurrentWeatherView extends StatelessWidget {
           ),
         ),
       ],
-    );
+    ));
   }
 }

@@ -57,9 +57,11 @@ class _HourlyForecastViewState extends State<HourlyForecastView> with SingleTick
       maxTemp += 2;
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+    return Semantics(
+      label: 'Hourly forecast. Temperatures ranging from ${minTemp.round()} to ${maxTemp.round()} degrees',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.0),
           child: SectionHeader(title: 'Hourly Forecast'),
@@ -190,7 +192,7 @@ class _HourlyForecastViewState extends State<HourlyForecastView> with SingleTick
           ),
         ),
       ],
-    );
+    ));
   }
 }
 

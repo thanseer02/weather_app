@@ -106,8 +106,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               bottom: false,
               child: RefreshIndicator(
                 onRefresh: () => ref.read(weatherProvider.notifier).refresh(),
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 600),
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                   child: Column(
                     children: [
                       const SizedBox(height: 20),
@@ -134,6 +137,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
               ),
             ),
+          ),
           );
         },
         loading: () => AnimatedWeatherBg(

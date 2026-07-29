@@ -90,24 +90,31 @@ class _AnimatedWeatherBgState extends State<AnimatedWeatherBg> with SingleTicker
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  CustomPaint(
-                    painter: WeatherParticlesPainter(
-                      system: _particleSystem,
-                      condition: widget.condition,
+                  RepaintBoundary(
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        CustomPaint(
+                          painter: WeatherParticlesPainter(
+                            system: _particleSystem,
+                            condition: widget.condition,
+                          ),
+                        ),
+                        if (widget.condition == WeatherCondition.rain || widget.condition == WeatherCondition.thunder)
+                          const RealisticRainAnimation(
+                            particleCount: 200,
+                            windSpeed: 4.0,
+                          ),
+                        if (widget.condition == WeatherCondition.snow)
+                          const RealisticSnowAnimation(
+                            particleCount: 150,
+                            windSpeed: 1.5,
+                          ),
+                        if (widget.condition == WeatherCondition.thunder)
+                          const RealisticThunderAnimation(),
+                      ],
                     ),
                   ),
-                  if (widget.condition == WeatherCondition.rain || widget.condition == WeatherCondition.thunder)
-                    const RealisticRainAnimation(
-                      particleCount: 200,
-                      windSpeed: 4.0,
-                    ),
-                  if (widget.condition == WeatherCondition.snow)
-                    const RealisticSnowAnimation(
-                      particleCount: 150,
-                      windSpeed: 1.5,
-                    ),
-                  if (widget.condition == WeatherCondition.thunder)
-                    const RealisticThunderAnimation(),
                   widget.child,
                 ],
               ),

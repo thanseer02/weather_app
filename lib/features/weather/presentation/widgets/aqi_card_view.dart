@@ -81,9 +81,11 @@ class _AqiCardViewState extends State<AqiCardView> with SingleTickerProviderStat
 
     final targetProgress = aqi / 5.0;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-      child: Column(
+    return Semantics(
+      label: 'Air quality index is $aqi, which is $category. $suggestion',
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SectionHeader(title: 'Air Quality'),
@@ -174,7 +176,7 @@ class _AqiCardViewState extends State<AqiCardView> with SingleTickerProviderStat
           ),
         ],
       ),
-    );
+    ));
   }
 }
 
