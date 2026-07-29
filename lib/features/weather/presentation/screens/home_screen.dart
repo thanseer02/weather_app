@@ -1,12 +1,27 @@
 import 'package:flutter/material.dart';
-import '../../../../core/widgets/animated_gradient_bg.dart';
+import '../../../../core/widgets/weather_background/animated_weather_bg.dart';
+import '../../../../core/widgets/weather_background/weather_condition.dart';
 import 'widgets/current_weather_view.dart';
 import 'widgets/daily_forecast_view.dart';
 import 'widgets/hourly_forecast_view.dart';
 import 'widgets/weather_details_grid.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  WeatherCondition _currentCondition = WeatherCondition.rain;
+
+  void _cycleCondition() {
+    setState(() {
+      final nextIndex = (_currentCondition.index + 1) % WeatherCondition.values.length;
+      _currentCondition = WeatherCondition.values[nextIndex];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,13 +51,19 @@ class HomeScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
+            icon: const Icon(Icons.change_circle_outlined, color: Colors.white),
+            tooltip: 'Change Weather',
+            onPressed: _cycleCondition, // Added to easily test all weather conditions
+          ),
+          IconButton(
             icon: const Icon(Icons.more_vert, color: Colors.white),
             onPressed: () {},
           ),
         ],
       ),
-      body: const AnimatedGradientBg(
-        child: SafeArea(
+      body: AnimatedWeatherBg(
+        condition: _currentCondition,
+        child: const SafeArea(
           bottom: false,
           child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
