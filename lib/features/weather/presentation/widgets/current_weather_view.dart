@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../domain/entities/weather_entity.dart';
 
@@ -11,11 +12,11 @@ class CurrentWeatherView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Image.network(
-          'https://openweathermap.org/img/wn/${weather.iconCode}@4x.png',
+        CachedNetworkImage(
+          imageUrl: 'https://openweathermap.org/img/wn/${weather.iconCode}@4x.png',
           width: 150,
           height: 150,
-          errorBuilder: (context, error, stackTrace) => const SizedBox(
+          errorWidget: (context, url, error) => const SizedBox(
             width: 150,
             height: 150,
             child: Icon(Icons.cloud, size: 100, color: Colors.white),

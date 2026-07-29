@@ -10,7 +10,7 @@ class RetryInterceptor extends Interceptor {
   @override
   Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
     var extra = err.requestOptions.extra;
-    var retries = extra['retries'] ?? 0;
+    var retries = (extra['retries'] ?? 0) as int;
     
     if (_shouldRetry(err) && retries < maxRetries) {
       extra['retries'] = retries + 1;

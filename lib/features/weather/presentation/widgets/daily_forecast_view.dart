@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/section_header.dart';
 import '../../domain/entities/weather_entity.dart';
@@ -92,11 +93,15 @@ class _DailyForecastItemState extends State<_DailyForecastItem> with SingleTicke
                         '${(item.pop * 100).round()}% ',
                         style: const TextStyle(color: Colors.lightBlueAccent, fontSize: 12, fontWeight: FontWeight.bold),
                       ),
-                    Image.network(
-                      'https://openweathermap.org/img/wn/${item.iconCode}.png',
-                      width: 30,
-                      height: 30,
-                      errorBuilder: (context, error, stackTrace) => const Icon(Icons.cloud, color: Colors.white),
+                    CachedNetworkImage(
+                      imageUrl: 'https://openweathermap.org/img/wn/${item.iconCode}.png',
+                      width: 40,
+                      height: 40,
+                      errorWidget: (context, url, error) => const SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: Icon(Icons.cloud, color: Colors.white70, size: 24),
+                      ),
                     ),
                   ],
                 ),

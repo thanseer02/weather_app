@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
+import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/section_header.dart';
 import '../../domain/entities/weather_entity.dart';
@@ -140,11 +141,15 @@ class _HourlyForecastViewState extends State<HourlyForecastView> with SingleTick
                                 ),
                               ),
                               // Icon
-                              Image.network(
-                                'https://openweathermap.org/img/wn/${item.iconCode}.png',
+                              CachedNetworkImage(
+                                imageUrl: 'https://openweathermap.org/img/wn/${item.iconCode}.png',
                                 width: 40,
                                 height: 40,
-                                errorBuilder: (context, error, stackTrace) => const Icon(Icons.cloud, color: Colors.white),
+                                errorWidget: (context, url, error) => const SizedBox(
+                                  width: 40,
+                                  height: 40,
+                                  child: Icon(Icons.cloud, color: Colors.white, size: 24),
+                                ),
                               ),
                               // Gap for the graph
                               const SizedBox(height: graphHeight),
