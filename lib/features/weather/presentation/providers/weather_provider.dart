@@ -42,7 +42,8 @@ class WeatherNotifier extends AsyncNotifier<WeatherState> {
       (weather) => forecastResult.fold(
         (failure) => throw Exception(failure.message),
         (forecast) {
-          sl<WidgetService>().updateWidgetData(weather: weather, lat: lat, lon: lon);
+          final cityName = sl<StorageService>().getLastLocation()?.cityName ?? 'Unknown';
+          sl<WidgetService>().updateWidgetData(weather: weather, cityName: cityName);
           return WeatherState(current: weather, forecast: forecast);
         },
       ),

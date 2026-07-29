@@ -40,7 +40,7 @@ void callbackDispatcher() {
         (failure) {},
         (weather) async {
           // Push to Home Widgets
-          await widgetService.updateWidgetData(weather: weather.current, location: location);
+          await widgetService.updateWidgetData(weather: weather.current, cityName: location.cityName);
 
           final temp = weather.current.temperature;
           final condition = weather.current.weatherCondition.toLowerCase();

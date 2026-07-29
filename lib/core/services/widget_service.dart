@@ -1,6 +1,5 @@
 import 'package:home_widget/home_widget.dart';
 import '../../features/weather/domain/entities/weather_entity.dart';
-import '../../features/weather/domain/entities/location_entity.dart';
 import 'package:logger/logger.dart';
 
 class WidgetService {
@@ -15,11 +14,11 @@ class WidgetService {
 
   Future<void> updateWidgetData({
     required WeatherEntity weather,
-    required LocationEntity location,
+    required String cityName,
   }) async {
     try {
       await HomeWidget.saveWidgetData('temperature', '${weather.temperature.round()}°');
-      await HomeWidget.saveWidgetData('cityName', location.cityName);
+      await HomeWidget.saveWidgetData('cityName', cityName);
       await HomeWidget.saveWidgetData('condition', weather.weatherCondition);
       
       // Request an update to all widgets on the home screen
