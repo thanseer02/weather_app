@@ -81,7 +81,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                       hintStyle: const TextStyle(color: Colors.white54),
                       prefixIcon: const Icon(Icons.search, color: Colors.white70),
                       filled: true,
-                      fillColor: Colors.white.withOpacity(0.1),
+                      fillColor: Colors.white.withValues(alpha: 0.1),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                         borderSide: BorderSide.none,
@@ -154,7 +154,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                             child: Container(
                               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.1),
+                                color: Colors.white.withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(20),
                                 border: Border.all(color: Colors.white24),
                               ),
@@ -201,7 +201,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                       leading: Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: isFavoriteList ? Colors.amber.withOpacity(0.2) : Colors.white10,
+                          color: isFavoriteList ? Colors.amber.withValues(alpha: 0.2) : Colors.white10,
                           shape: BoxShape.circle,
                         ),
                         child: Icon(

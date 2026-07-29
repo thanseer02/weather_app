@@ -95,7 +95,7 @@ class _HourlyForecastViewState extends State<HourlyForecastView> with SingleTick
                         padding: EdgeInsets.zero,
                         child: Container(
                           decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white.withOpacity(0.5), width: 1.5),
+                            border: Border.all(color: Colors.white.withValues(alpha: 0.5), width: 1.5),
                             borderRadius: BorderRadius.circular(24),
                           ),
                         ),
@@ -220,7 +220,7 @@ class TemperatureGraphPainter extends CustomPainter {
       ..shader = ui.Gradient.linear(
         Offset(0, 0),
         Offset(0, size.height),
-        [Colors.white.withOpacity(0.4), Colors.white.withOpacity(0.0)],
+        [Colors.white.withValues(alpha: 0.4), Colors.white.withValues(alpha: 0.0)],
       );
 
     final path = Path();
@@ -269,7 +269,7 @@ class TemperatureGraphPainter extends CustomPainter {
       canvas.drawPath(fillPath, fillPaint);
       canvas.drawPath(path, paint);
 
-      final textPainter = TextPainter(textDirection: TextDirection.ltr);
+      final textPainter = TextPainter(textDirection: ui.TextDirection.ltr);
       for (var point in points) {
         canvas.drawCircle(point, 4, Paint()..color = Colors.white);
         canvas.drawCircle(point, 2.5, Paint()..color = Colors.blue.shade300);

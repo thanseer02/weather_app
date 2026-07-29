@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../constants/app_shadows.dart';
 import 'app_colors.dart';
 import 'app_theme_extension.dart';
-import 'app_typography.dart';
 
 class AppTheme {
   static ThemeData get lightTheme {

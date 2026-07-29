@@ -133,7 +133,7 @@ class SettingsScreen extends ConsumerWidget {
                           SwitchListTile(
                             title: const Text('Push Notifications', style: TextStyle(color: Colors.white)),
                             secondary: const Icon(Icons.notifications, color: Colors.white70),
-                            activeColor: Colors.blueAccent,
+                            activeThumbColor: Colors.blueAccent,
                             value: settings.notificationsEnabled,
                             onChanged: (val) {
                               notifier.updateSettings(settings.copyWith(notificationsEnabled: val));

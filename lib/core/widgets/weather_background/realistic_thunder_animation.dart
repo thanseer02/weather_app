@@ -150,7 +150,7 @@ class _ThunderPainter extends CustomPainter {
     if (screenFlash > 0) {
       canvas.drawRect(
         Rect.fromLTWH(0, 0, size.width, size.height),
-        Paint()..color = Colors.white.withOpacity(screenFlash),
+        Paint()..color = Colors.white.withValues(alpha: screenFlash),
       );
     }
 
@@ -176,8 +176,8 @@ class _ThunderPainter extends CustomPainter {
           Offset(bolt.startX, 0),
           250, // Radius of illumination
           [
-            Colors.deepPurpleAccent.withOpacity(bolt.opacity * 0.4),
-            Colors.white.withOpacity(bolt.opacity * 0.2),
+            Colors.deepPurpleAccent.withValues(alpha: bolt.opacity * 0.4),
+            Colors.white.withValues(alpha: bolt.opacity * 0.2),
             Colors.transparent,
           ],
           [0.0, 0.3, 1.0],
@@ -187,11 +187,11 @@ class _ThunderPainter extends CustomPainter {
       canvas.drawCircle(Offset(bolt.startX, 0), 300, illuminationPaint);
 
       // Draw the ambient glow around the bolt
-      glowPaint.color = Colors.blueAccent.withOpacity(bolt.opacity * 0.7);
+      glowPaint.color = Colors.blueAccent.withValues(alpha: bolt.opacity * 0.7);
       canvas.drawPath(bolt.path, glowPaint);
 
       // Draw the core white bolt
-      boltPaint.color = Colors.white.withOpacity(bolt.opacity);
+      boltPaint.color = Colors.white.withValues(alpha: bolt.opacity);
       canvas.drawPath(bolt.path, boltPaint);
     }
   }

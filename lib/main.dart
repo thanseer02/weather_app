@@ -6,8 +6,7 @@ import 'routes/app_router.dart';
 import 'core/di/dependency_injection.dart';
 import 'core/services/notification_service.dart';
 import 'core/services/background_task_service.dart';
-import 'package:home_widget/home_widget.dart';
-import 'core/services/widget_service.dart';
+import 'package:home_widget/home_widget.dart' hide callbackDispatcher;
 
 @pragma('vm:entry-point')
 Future<void> backgroundCallback(Uri? uri) async {
@@ -29,7 +28,7 @@ void main() async {
   await BackgroundTaskService.init();
   await BackgroundTaskService.scheduleWeatherChecks();
 
-  HomeWidget.registerBackgroundCallback(backgroundCallback);
+  HomeWidget.registerInteractivityCallback(backgroundCallback);
 
   runApp(const ProviderScope(child: MyApp()));
 }

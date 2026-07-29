@@ -107,7 +107,7 @@ class WeatherParticlesPainter extends CustomPainter {
 
     // Draw clouds/fog
     for (var c in system.clouds) {
-      paint.color = Colors.white.withOpacity(c.opacity);
+      paint.color = Colors.white.withValues(alpha: c.opacity);
       paint.maskFilter = const MaskFilter.blur(BlurStyle.normal, 20);
       canvas.drawOval(Rect.fromCenter(center: Offset(c.x, c.y), width: c.sizeX, height: c.sizeY), paint);
     }
@@ -116,7 +116,7 @@ class WeatherParticlesPainter extends CustomPainter {
 
     // Draw lightning
     if (system.lightningFlash > 0) {
-      paint.color = Colors.white.withOpacity(system.lightningFlash.clamp(0.0, 1.0));
+      paint.color = Colors.white.withValues(alpha: system.lightningFlash.clamp(0.0, 1.0));
       canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), paint);
     }
   }

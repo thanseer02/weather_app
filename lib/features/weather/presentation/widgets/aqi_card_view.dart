@@ -213,7 +213,7 @@ class AqiGaugePainter extends CustomPainter {
       ..strokeCap = StrokeCap.round;
 
     progressPaint.shader = SweepGradient(
-      colors: [color.withOpacity(0.3), color],
+      colors: [color.withValues(alpha: 0.3), color],
       startAngle: startAngle,
       endAngle: startAngle + totalSweepAngle,
       transform: const GradientRotation(startAngle),

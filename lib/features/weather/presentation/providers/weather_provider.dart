@@ -4,6 +4,7 @@ import '../../../../core/di/dependency_injection.dart';
 import '../../domain/entities/weather_entity.dart';
 import '../../domain/repositories/weather_repository.dart';
 import 'location_provider.dart';
+import '../../../../core/services/storage_service.dart';
 import '../../../../core/services/widget_service.dart';
 
 class WeatherState extends Equatable {

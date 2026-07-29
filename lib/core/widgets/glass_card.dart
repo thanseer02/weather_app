@@ -24,7 +24,7 @@ class GlassCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeExt = Theme.of(context).extension<AppThemeExtension>();
-    final glassColor = themeExt?.glassColor ?? Colors.white.withOpacity(0.2);
+    final glassColor = themeExt?.glassColor ?? Colors.white.withValues(alpha: 0.2);
 
     return Container(
       width: width,

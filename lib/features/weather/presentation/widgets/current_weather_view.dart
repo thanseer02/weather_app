@@ -23,20 +23,23 @@ class CurrentWeatherView extends StatelessWidget {
         ),
         Text(
           '${weather.temperature.round()}°',
-          style: AppTypography.displayLarge.copyWith(color: Colors.white),
+          style: AppTypography.getTextTheme(context).displayLarge?.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         Text(
           weather.description.toUpperCase(),
-          style: AppTypography.titleLarge.copyWith(
-            color: Colors.white.withOpacity(0.9),
+          style: AppTypography.getTextTheme(context).titleLarge?.copyWith(
+            color: Colors.white.withValues(alpha: 0.9),
             letterSpacing: 2,
           ),
         ),
         const SizedBox(height: 8),
         Text(
           'H:${weather.tempMax.round()}°  L:${weather.tempMin.round()}°',
-          style: AppTypography.bodyLarge.copyWith(
-            color: Colors.white.withOpacity(0.8),
+          style: AppTypography.getTextTheme(context).bodyLarge?.copyWith(
+            color: Colors.white.withValues(alpha: 0.8),
           ),
         ),
       ],

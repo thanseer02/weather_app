@@ -156,7 +156,7 @@ class _SnowPainter extends CustomPainter {
     for (final flake in flakes) {
       // Simulate photographic depth of field: flakes far away are out of focus (blurred)
       final paint = flake.z > 0.6 ? _blurPaint : _frontPaint;
-      paint.color = Colors.white.withOpacity(flake.opacity);
+      paint.color = Colors.white.withValues(alpha: flake.opacity);
       canvas.drawCircle(Offset(flake.x, flake.y), flake.radius, paint);
     }
   }

@@ -40,11 +40,11 @@ void callbackDispatcher() {
         (failure) {},
         (weather) async {
           // Push to Home Widgets
-          await widgetService.updateWidgetData(weather: weather.current, cityName: location.cityName);
+          await widgetService.updateWidgetData(weather: weather, cityName: location.cityName);
 
-          final temp = weather.current.temperature;
-          final condition = weather.current.weatherCondition.toLowerCase();
-          final wind = weather.current.windSpeed;
+          final temp = weather.temperature;
+          final condition = weather.description.toLowerCase();
+          final wind = weather.windSpeed;
           
           String? alertTitle;
           String? alertBody;
@@ -111,7 +111,7 @@ class BackgroundTaskService {
       constraints: Constraints(
         networkType: NetworkType.connected, // Only run when internet is available
       ),
-      existingWorkPolicy: ExistingWorkPolicy.replace,
+      existingWorkPolicy: ExistingPeriodicWorkPolicy.replace,
     );
   }
 }

@@ -19,7 +19,7 @@ class WidgetService {
     try {
       await HomeWidget.saveWidgetData('temperature', '${weather.temperature.round()}°');
       await HomeWidget.saveWidgetData('cityName', cityName);
-      await HomeWidget.saveWidgetData('condition', weather.weatherCondition);
+      await HomeWidget.saveWidgetData('condition', weather.description);
       
       // Request an update to all widgets on the home screen
       await HomeWidget.updateWidget(

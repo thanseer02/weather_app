@@ -147,6 +147,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             onRetry: () => ref.read(weatherProvider.notifier).refresh(),
           ),
         ),
+        ),
       ),
     );
   }

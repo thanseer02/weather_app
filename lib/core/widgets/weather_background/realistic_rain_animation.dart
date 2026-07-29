@@ -148,7 +148,7 @@ class _RainPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     for (final drop in drops) {
-      paint.color = Colors.white.withOpacity(drop.opacity);
+      paint.color = Colors.white.withValues(alpha: drop.opacity);
       paint.strokeWidth = drop.strokeWidth;
       
       // Calculate tail position based on length and wind speed parallax

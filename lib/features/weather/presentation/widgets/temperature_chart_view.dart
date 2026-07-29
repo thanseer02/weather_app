@@ -144,8 +144,8 @@ class _TemperatureChartViewState extends State<TemperatureChartView> {
                       show: true,
                       gradient: LinearGradient(
                         colors: [
-                          Colors.white.withOpacity(0.5),
-                          Colors.white.withOpacity(0.0),
+                          Colors.white.withValues(alpha: 0.5),
+                          Colors.white.withValues(alpha: 0.0),
                         ],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
