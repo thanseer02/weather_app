@@ -12,6 +12,8 @@ import '../../features/weather/data/repositories/weather_repository_impl.dart';
 import '../../features/weather/domain/repositories/weather_repository.dart';
 import '../../features/weather/domain/usecases/get_current_weather_usecase.dart';
 import '../../features/weather/domain/usecases/get_forecast_usecase.dart';
+import '../widgets/shared/services/widget_updater_interface.dart';
+import '../widgets/shared/services/widget_update_orchestrator.dart';
 
 final sl = GetIt.instance;
 
@@ -49,4 +51,11 @@ Future<void> setupLocator() async {
   // UseCases
   sl.registerLazySingleton(() => GetCurrentWeatherUseCase(sl()));
   sl.registerLazySingleton(() => GetForecastUseCase(sl()));
+
+  // Widget Architecture
+  sl.registerLazySingleton<WidgetUpdateOrchestrator>(() => WidgetUpdateOrchestrator([
+        MobileWidgetUpdater(),
+        DesktopWidgetUpdater(),
+        WebWidgetUpdater(),
+      ]));
 }
