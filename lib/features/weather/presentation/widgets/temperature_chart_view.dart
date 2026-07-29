@@ -94,7 +94,7 @@ class _TemperatureChartViewState extends State<TemperatureChartView> {
                         final item = hourly[value.toInt()];
                         final isFirst = value == 0;
                         return SideTitleWidget(
-                          axisSide: meta.axisSide,
+                          meta: meta,
                           child: Text(
                             isFirst ? 'Now' : DateFormat('ha').format(item.date).toLowerCase(),
                             style: TextStyle(

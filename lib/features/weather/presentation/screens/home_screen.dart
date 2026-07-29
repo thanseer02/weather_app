@@ -7,14 +7,13 @@ import '../../../../core/widgets/loading_widget.dart';
 import '../../../../core/widgets/error_widget.dart';
 import '../providers/weather_provider.dart';
 import '../providers/location_provider.dart';
-import 'widgets/current_weather_view.dart';
-import 'widgets/temperature_chart_view.dart';
-import 'widgets/temperature_chart_view.dart';
-import 'widgets/daily_forecast_view.dart';
-import 'widgets/hourly_forecast_view.dart';
-import 'widgets/weather_details_grid.dart';
-import 'widgets/aqi_card_view.dart';
-import 'widgets/wind_compass_view.dart';
+import '../widgets/current_weather_view.dart';
+import '../widgets/temperature_chart_view.dart';
+import '../widgets/daily_forecast_view.dart';
+import '../widgets/hourly_forecast_view.dart';
+import '../widgets/weather_details_grid.dart';
+import '../widgets/aqi_card_view.dart';
+import '../widgets/wind_compass_view.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
