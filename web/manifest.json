@@ -1,12 +1,12 @@
 {
-    "name": "Skyline Weather",
-    "short_name": "Skyline",
+    "name": "weather",
+    "short_name": "weather",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0d1b2a",
-    "theme_color": "#0d1b2a",
-    "description": "A premium multi-platform weather application built with Flutter.",
-    "orientation": "any",
+    "background_color": "#0175C2",
+    "theme_color": "#0175C2",
+    "description": "A new Flutter project.",
+    "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
         {
