@@ -7,6 +7,7 @@ import '../../../../core/widgets/error_widget.dart';
 import '../providers/weather_provider.dart';
 import '../providers/location_provider.dart';
 import 'widgets/current_weather_view.dart';
+import 'widgets/temperature_chart_view.dart';
 import 'widgets/daily_forecast_view.dart';
 import 'widgets/hourly_forecast_view.dart';
 import 'widgets/weather_details_grid.dart';
@@ -85,6 +86,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     children: [
                       const SizedBox(height: 20),
                       CurrentWeatherView(weather: weatherState.current),
+                      const SizedBox(height: 48),
+                      TemperatureChartView(forecast: weatherState.forecast),
                       const SizedBox(height: 48),
                       HourlyForecastView(forecast: weatherState.forecast),
                       const SizedBox(height: 32),
