@@ -4,6 +4,8 @@ class WidgetDataModel {
   final String condition;
   final String iconCode;
   final DateTime lastUpdated;
+  final double tempMin;
+  final double tempMax;
 
   WidgetDataModel({
     required this.cityName,
@@ -11,6 +13,8 @@ class WidgetDataModel {
     required this.condition,
     required this.iconCode,
     required this.lastUpdated,
+    required this.tempMin,
+    required this.tempMax,
   });
 
   Map<String, dynamic> toJson() {
@@ -20,6 +24,8 @@ class WidgetDataModel {
       'condition': condition,
       'iconCode': iconCode,
       'lastUpdated': lastUpdated.toIso8601String(),
+      'tempMin': tempMin,
+      'tempMax': tempMax,
     };
   }
 
@@ -30,6 +36,8 @@ class WidgetDataModel {
       condition: json['condition'] as String,
       iconCode: json['iconCode'] as String,
       lastUpdated: DateTime.parse(json['lastUpdated'] as String),
+      tempMin: (json['tempMin'] as num).toDouble(),
+      tempMax: (json['tempMax'] as num).toDouble(),
     );
   }
 }

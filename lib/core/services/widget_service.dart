@@ -1,39 +1,32 @@
-import 'package:home_widget/home_widget.dart';
 import '../../features/weather/domain/entities/weather_entity.dart';
-import 'package:logger/logger.dart';
-import 'platform_service.dart';
+import '../widgets/shared/models/widget_data_model.dart';
+import '../widgets/shared/services/widget_update_orchestrator.dart';
+import '../di/dependency_injection.dart';
 
 class WidgetService {
   static const String appGroupId = 'group.com.example.weather'; // iOS App Group
   static const String androidWidgetName = 'WeatherWidgetProvider'; // Android Class Name
 
-  final Logger _logger = Logger();
-
   Future<void> init() async {
-    if (PlatformService.isMobile) {
-      await HomeWidget.setAppGroupId(appGroupId);
-    }
+    // Left for backward compatibility or direct calls
   }
 
   Future<void> updateWidgetData({
     required WeatherEntity weather,
     required String cityName,
   }) async {
-    if (!PlatformService.isMobile) return;
-
     try {
-      await HomeWidget.saveWidgetData('temperature', '${weather.temperature.round()}°');
-      await HomeWidget.saveWidgetData('cityName', cityName);
-      await HomeWidget.saveWidgetData('condition', weather.description);
-      
-      // Request an update to all widgets on the home screen
-      await HomeWidget.updateWidget(
-        name: androidWidgetName,
-        iOSName: 'WeatherWidget',
+      await sl<WidgetUpdateOrchestrator>().dispatchUpdate(
+        WidgetDataModel(
+          cityName: cityName,
+          temperature: weather.temperature,
+          condition: weather.description,
+          iconCode: weather.iconCode,
+          lastUpdated: DateTime.now(),
+          tempMin: weather.tempMin,
+          tempMax: weather.tempMax,
+        ),
       );
-      _logger.i('Successfully updated Home Widgets with latest weather data.');
-    } catch (e) {
-      _logger.e('Failed to update Home Widget: $e');
-    }
+    } catch (_) {}
   }
 }

@@ -19,6 +19,10 @@ class MobileWidgetUpdater implements WidgetUpdater {
       await HomeWidget.saveWidgetData('temperature', '${data.temperature.round()}°');
       await HomeWidget.saveWidgetData('cityName', data.cityName);
       await HomeWidget.saveWidgetData('condition', data.condition);
+      await HomeWidget.saveWidgetData('iconCode', data.iconCode);
+      await HomeWidget.saveWidgetData('tempMin', '${data.tempMin.round()}°');
+      await HomeWidget.saveWidgetData('tempMax', '${data.tempMax.round()}°');
+      await HomeWidget.saveWidgetData('lastUpdated', '${data.lastUpdated.hour.toString().padLeft(2, '0')}:${data.lastUpdated.minute.toString().padLeft(2, '0')}');
       
       await HomeWidget.updateWidget(
         name: androidWidgetName,
