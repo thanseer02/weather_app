@@ -5,6 +5,7 @@ import '../../../../core/widgets/weather_background/animated_weather_bg.dart';
 import '../../../../core/widgets/weather_background/weather_condition.dart';
 import '../../../../core/widgets/loading_widget.dart';
 import '../../../../core/widgets/error_widget.dart';
+import '../../../../core/widgets/responsive_layout.dart';
 import '../providers/weather_provider.dart';
 import '../providers/location_provider.dart';
 import '../widgets/current_weather_view.dart';
@@ -14,6 +15,7 @@ import '../widgets/hourly_forecast_view.dart';
 import '../widgets/weather_details_grid.dart';
 import '../widgets/aqi_card_view.dart';
 import '../widgets/wind_compass_view.dart';
+import 'desktop_home_view.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -39,6 +41,33 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final weatherAsync = ref.watch(weatherProvider);
     final locationAsync = ref.watch(locationProvider);
 
+    return ResponsiveLayout(
+      mobile: _buildMobileLayout(context, weatherAsync, locationAsync),
+      tablet: _buildMobileLayout(context, weatherAsync, locationAsync), // We can build a dedicated tablet view later
+      desktop: weatherAsync.when(
+        data: (weatherState) {
+          final condition = _mapIconToCondition(weatherState.current.iconCode);
+          return AnimatedWeatherBg(
+            condition: condition,
+            child: const DesktopHomeView(),
+          );
+        },
+        loading: () => AnimatedWeatherBg(
+          condition: WeatherCondition.sunny,
+          child: const DesktopHomeView(),
+        ),
+        error: (err, stack) => AnimatedWeatherBg(
+          condition: WeatherCondition.cloudy,
+          child: CustomErrorWidget(
+            message: err.toString().replaceAll('Exception: ', ''),
+            onRetry: () => ref.read(weatherProvider.notifier).refresh(),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMobileLayout(BuildContext context, AsyncValue weatherAsync, AsyncValue locationAsync) {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -138,7 +167,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
           ),
-          );
+          ));
         },
         loading: () => AnimatedWeatherBg(
           condition: WeatherCondition.sunny,
