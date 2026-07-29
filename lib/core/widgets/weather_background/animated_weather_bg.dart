@@ -3,6 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'weather_condition.dart';
 import 'weather_particles_painter.dart';
 import 'weather_colors.dart';
+import 'realistic_rain_animation.dart';
 
 class AnimatedWeatherBg extends StatefulWidget {
   final WeatherCondition condition;
@@ -93,6 +94,11 @@ class _AnimatedWeatherBgState extends State<AnimatedWeatherBg> with SingleTicker
                       condition: widget.condition,
                     ),
                   ),
+                  if (widget.condition == WeatherCondition.rain || widget.condition == WeatherCondition.thunder)
+                    const RealisticRainAnimation(
+                      particleCount: 200,
+                      windSpeed: 4.0,
+                    ),
                   widget.child,
                 ],
               ),

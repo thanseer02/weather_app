@@ -11,6 +11,8 @@ class WeatherEntity extends Equatable {
   final int humidity;
   final int pressure;
   final double windSpeed;
+  final int windDirection;
+  final double windGust;
   final double pop; // Probability of precipitation (0.0 to 1.0)
   final int visibility;
   final int sunrise;
@@ -28,6 +30,8 @@ class WeatherEntity extends Equatable {
     required this.humidity,
     required this.pressure,
     required this.windSpeed,
+    required this.windDirection,
+    required this.windGust,
     required this.pop,
     required this.visibility,
     required this.sunrise,
@@ -47,6 +51,8 @@ class WeatherEntity extends Equatable {
         humidity,
         pressure,
         windSpeed,
+        windDirection,
+        windGust,
         pop,
         visibility,
         sunrise,

@@ -13,6 +13,7 @@ import 'widgets/daily_forecast_view.dart';
 import 'widgets/hourly_forecast_view.dart';
 import 'widgets/weather_details_grid.dart';
 import 'widgets/aqi_card_view.dart';
+import 'widgets/wind_compass_view.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -95,7 +96,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       const SizedBox(height: 32),
                       DailyForecastView(forecast: weatherState.forecast),
                       const SizedBox(height: 32),
-                      const AqiCardView(aqi: 2), // Passing mocked AQI of 2 (Fair) since we didn't hook up the separate AQI endpoint
+                      const AqiCardView(aqi: 2), // Mocked AQI
+                      const SizedBox(height: 32),
+                      WindCompassView(
+                        windDirection: weatherState.current.windDirection,
+                        windSpeed: weatherState.current.windSpeed,
+                        windGust: weatherState.current.windGust,
+                      ),
                       const SizedBox(height: 32),
                       WeatherDetailsGrid(weather: weatherState.current),
                       const SizedBox(height: 60), // Bottom padding

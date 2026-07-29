@@ -114,16 +114,11 @@ class WeatherParticlesPainter extends CustomPainter {
 
     paint.maskFilter = null;
 
-    // Draw rain/snow
+    // Draw snow (Rain is now handled by RealisticRainAnimation)
     for (var p in system.particles) {
       if (condition == WeatherCondition.snow) {
         paint.color = Colors.white.withOpacity(p.opacity);
         canvas.drawCircle(Offset(p.x, p.y), p.size, paint);
-      } else {
-        paint.color = Colors.white.withOpacity(p.opacity);
-        paint.strokeWidth = p.size;
-        paint.strokeCap = StrokeCap.round;
-        canvas.drawLine(Offset(p.x, p.y), Offset(p.x - p.speedX * 0.1, p.y - p.speedY * 0.1), paint);
       }
     }
 
