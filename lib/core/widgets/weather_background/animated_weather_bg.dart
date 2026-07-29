@@ -4,6 +4,7 @@ import 'weather_condition.dart';
 import 'weather_particles_painter.dart';
 import 'weather_colors.dart';
 import 'realistic_rain_animation.dart';
+import 'realistic_snow_animation.dart';
 
 class AnimatedWeatherBg extends StatefulWidget {
   final WeatherCondition condition;
@@ -98,6 +99,11 @@ class _AnimatedWeatherBgState extends State<AnimatedWeatherBg> with SingleTicker
                     const RealisticRainAnimation(
                       particleCount: 200,
                       windSpeed: 4.0,
+                    ),
+                  if (widget.condition == WeatherCondition.snow)
+                    const RealisticSnowAnimation(
+                      particleCount: 150,
+                      windSpeed: 1.5,
                     ),
                   widget.child,
                 ],
