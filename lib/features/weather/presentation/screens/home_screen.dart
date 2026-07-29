@@ -67,6 +67,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
         actions: [
           IconButton(
+            icon: const Icon(Icons.settings, color: Colors.white),
+            onPressed: () {
+              context.push('/settings');
+            },
+          ),
+          const SizedBox(width: 8),
+          IconButton(
             icon: const Icon(Icons.refresh, color: Colors.white),
             onPressed: () {
               ref.read(weatherProvider.notifier).refresh();

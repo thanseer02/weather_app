@@ -7,6 +7,7 @@ class StorageService {
   static const String lastLocationKey = 'last_location';
   static const String recentCitiesKey = 'recent_cities';
   static const String favoriteCitiesKey = 'favorite_cities';
+  static const String settingsKey = 'app_global_settings';
 
   late Box _box;
 
@@ -68,5 +69,19 @@ class StorageService {
     final data = _box.get(favoriteCitiesKey) as List<dynamic>?;
     if (data == null) return [];
     return data.map((e) => LocationEntity.fromJson(jsonDecode(e.toString()))).toList();
+  }
+
+  // --- Global Settings ---
+
+  Future<void> saveSettings(Map<String, dynamic> settingsJson) async {
+    await _box.put(settingsKey, jsonEncode(settingsJson));
+  }
+
+  Map<String, dynamic>? getSettings() {
+    final data = _box.get(settingsKey);
+    if (data != null) {
+      return jsonDecode(data) as Map<String, dynamic>;
+    }
+    return null;
   }
 }
