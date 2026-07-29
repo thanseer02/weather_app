@@ -1,30 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:weather/features/weather/presentation/widgets/current_weather_view.dart';
-import 'package:weather/features/weather/presentation/widgets/daily_forecast_view.dart';
-import 'package:weather/features/weather/presentation/widgets/hourly_forecast_view.dart';
-import 'package:weather/features/weather/presentation/widgets/weather_details_grid.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/widgets/weather_background/animated_weather_bg.dart';
 import '../../../../core/widgets/weather_background/weather_condition.dart';
+import '../../../../core/widgets/loading_widget.dart';
+import '../../../../core/widgets/error_widget.dart';
+import '../providers/weather_provider.dart';
+import '../providers/location_provider.dart';
+import 'widgets/current_weather_view.dart';
+import 'widgets/daily_forecast_view.dart';
+import 'widgets/hourly_forecast_view.dart';
+import 'widgets/weather_details_grid.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  WeatherCondition _currentCondition = WeatherCondition.rain;
-
-  void _cycleCondition() {
-    setState(() {
-      final nextIndex = (_currentCondition.index + 1) % WeatherCondition.values.length;
-      _currentCondition = WeatherCondition.values[nextIndex];
-    });
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  // Simple mapping from OpenWeather icon code to our WeatherCondition
+  WeatherCondition _mapIconToCondition(String iconCode) {
+    if (iconCode.contains('01')) return WeatherCondition.sunny;
+    if (iconCode.contains('02') || iconCode.contains('03') || iconCode.contains('04')) return WeatherCondition.cloudy;
+    if (iconCode.contains('09') || iconCode.contains('10')) return WeatherCondition.rain;
+    if (iconCode.contains('11')) return WeatherCondition.thunder;
+    if (iconCode.contains('13')) return WeatherCondition.snow;
+    if (iconCode.contains('50')) return WeatherCondition.fog;
+    return WeatherCondition.sunny; // Default
   }
 
   @override
   Widget build(BuildContext context) {
+    final weatherAsync = ref.watch(weatherProvider);
+    final locationAsync = ref.watch(locationProvider);
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -32,17 +42,19 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.add, color: Colors.white),
-          onPressed: () {},
+          icon: const Icon(Icons.search, color: Colors.white),
+          onPressed: () {
+            // Future feature: show search dialog
+          },
         ),
         title: Row(
           mainAxisSize: MainAxisSize.min,
-          children: const [
-            Icon(Icons.location_on, color: Colors.white, size: 20),
-            SizedBox(width: 8),
+          children: [
+            const Icon(Icons.location_on, color: Colors.white, size: 20),
+            const SizedBox(width: 8),
             Text(
-              'New York',
-              style: TextStyle(
+              locationAsync.valueOrNull?.cityName ?? 'Loading...',
+              style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
@@ -51,35 +63,51 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.change_circle_outlined, color: Colors.white),
-            tooltip: 'Change Weather',
-            onPressed: _cycleCondition, // Added to easily test all weather conditions
-          ),
-          IconButton(
-            icon: const Icon(Icons.more_vert, color: Colors.white),
-            onPressed: () {},
+            icon: const Icon(Icons.refresh, color: Colors.white),
+            onPressed: () {
+              ref.read(weatherProvider.notifier).refresh();
+            },
           ),
         ],
       ),
-      body: AnimatedWeatherBg(
-        condition: _currentCondition,
-        child: const SafeArea(
-          bottom: false,
-          child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Column(
-              children: [
-                SizedBox(height: 20),
-                CurrentWeatherView(),
-                SizedBox(height: 48),
-                HourlyForecastView(),
-                SizedBox(height: 32),
-                DailyForecastView(),
-                SizedBox(height: 32),
-                WeatherDetailsGrid(),
-                SizedBox(height: 60), // Bottom padding
-              ],
+      body: weatherAsync.when(
+        data: (weatherState) {
+          final condition = _mapIconToCondition(weatherState.current.iconCode);
+          return AnimatedWeatherBg(
+            condition: condition,
+            child: SafeArea(
+              bottom: false,
+              child: RefreshIndicator(
+                onRefresh: () => ref.read(weatherProvider.notifier).refresh(),
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 20),
+                      CurrentWeatherView(weather: weatherState.current),
+                      const SizedBox(height: 48),
+                      HourlyForecastView(forecast: weatherState.forecast),
+                      const SizedBox(height: 32),
+                      DailyForecastView(forecast: weatherState.forecast),
+                      const SizedBox(height: 32),
+                      WeatherDetailsGrid(weather: weatherState.current),
+                      const SizedBox(height: 60), // Bottom padding
+                    ],
+                  ),
+                ),
+              ),
             ),
+          );
+        },
+        loading: () => AnimatedWeatherBg(
+          condition: WeatherCondition.sunny,
+          child: const LoadingWidget(message: 'Fetching weather...'),
+        ),
+        error: (err, stack) => AnimatedWeatherBg(
+          condition: WeatherCondition.cloudy,
+          child: CustomErrorWidget(
+            message: err.toString().replaceAll('Exception: ', ''),
+            onRetry: () => ref.read(weatherProvider.notifier).refresh(),
           ),
         ),
       ),
