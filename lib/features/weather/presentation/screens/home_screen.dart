@@ -48,7 +48,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         leading: IconButton(
           icon: const Icon(Icons.search, color: Colors.white),
           onPressed: () {
-            // Future feature: show search dialog
+            context.push('/search');
           },
         ),
         title: Row(

@@ -3,6 +3,7 @@ import '../../../../core/di/dependency_injection.dart';
 import '../../../../core/services/location_service.dart';
 import '../../../../core/services/storage_service.dart';
 import '../../domain/entities/location_entity.dart';
+import 'search_provider.dart';
 
 final locationProvider = AsyncNotifierProvider<LocationNotifier, LocationEntity>(
   LocationNotifier.new,
@@ -55,6 +56,7 @@ class LocationNotifier extends AsyncNotifier<LocationEntity> {
       },
       (location) {
         _storageService.saveLastLocation(location);
+        ref.read(searchProvider.notifier).saveRecentCity(location);
         state = AsyncValue.data(location);
       }
     );
