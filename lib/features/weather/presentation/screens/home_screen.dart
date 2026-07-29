@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:weather/features/weather/presentation/widgets/current_weather_view.dart';
+import 'package:weather/features/weather/presentation/widgets/daily_forecast_view.dart';
+import 'package:weather/features/weather/presentation/widgets/hourly_forecast_view.dart';
+import 'package:weather/features/weather/presentation/widgets/weather_details_grid.dart';
 import '../../../../core/widgets/weather_background/animated_weather_bg.dart';
 import '../../../../core/widgets/weather_background/weather_condition.dart';
-import 'widgets/current_weather_view.dart';
-import 'widgets/daily_forecast_view.dart';
-import 'widgets/hourly_forecast_view.dart';
-import 'widgets/weather_details_grid.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
