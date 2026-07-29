@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/section_header.dart';
+import '../../domain/entities/weather_entity.dart';
+import 'package:intl/intl.dart';
 
 class DailyForecastView extends StatelessWidget {
-  const DailyForecastView({super.key});
+  final ForecastEntity forecast;
+
+  const DailyForecastView({super.key, required this.forecast});
 
   @override
   Widget build(BuildContext context) {
-    final days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-    
+    if (forecast.daily.isEmpty) return const SizedBox.shrink();
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: Column(
@@ -21,12 +25,15 @@ class DailyForecastView extends StatelessWidget {
             child: ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: 7,
+              itemCount: forecast.daily.length,
               separatorBuilder: (context, index) => const Divider(
                 color: Colors.white24,
                 height: 1,
               ),
               itemBuilder: (context, index) {
+                final item = forecast.daily[index];
+                final isToday = index == 0;
+                
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
                   child: Row(
@@ -35,7 +42,7 @@ class DailyForecastView extends StatelessWidget {
                       SizedBox(
                         width: 100,
                         child: Text(
-                          index == 0 ? 'Today' : days[index],
+                          isToday ? 'Today' : DateFormat('EEEE').format(item.date),
                           style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -43,19 +50,21 @@ class DailyForecastView extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Icon(
-                        index % 3 == 0 ? Icons.wb_sunny : Icons.cloudy_snowing,
-                        color: index % 3 == 0 ? Colors.amber : Colors.white,
+                      Image.network(
+                        'https://openweathermap.org/img/wn/${item.iconCode}.png',
+                        width: 30,
+                        height: 30,
+                        errorBuilder: (context, error, stackTrace) => const Icon(Icons.cloud, color: Colors.white),
                       ),
                       Row(
                         children: [
                           Text(
-                            '${18 - index}°',
+                            '${item.tempMin.round()}°',
                             style: const TextStyle(color: Colors.white70),
                           ),
                           const SizedBox(width: 16),
                           Text(
-                            '${28 - index}°',
+                            '${item.tempMax.round()}°',
                             style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,

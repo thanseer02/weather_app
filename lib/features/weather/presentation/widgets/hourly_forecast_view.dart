@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/section_header.dart';
+import '../../domain/entities/weather_entity.dart';
+import 'package:intl/intl.dart';
 
 class HourlyForecastView extends StatelessWidget {
-  const HourlyForecastView({super.key});
+  final ForecastEntity forecast;
+
+  const HourlyForecastView({super.key, required this.forecast});
 
   @override
   Widget build(BuildContext context) {
+    if (forecast.hourly.isEmpty) return const SizedBox.shrink();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -20,8 +26,9 @@ class HourlyForecastView extends StatelessWidget {
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            itemCount: 24, // Dummy 24 hours
+            itemCount: forecast.hourly.length,
             itemBuilder: (context, index) {
+              final item = forecast.hourly[index];
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: GlassCard(
@@ -31,18 +38,20 @@ class HourlyForecastView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(
-                        '${index == 0 ? 12 : index > 12 ? index - 12 : index} ${index >= 12 ? 'PM' : 'AM'}',
+                        DateFormat('h a').format(item.date),
                         style: const TextStyle(
                           color: Colors.white70,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Icon(
-                        index % 2 == 0 ? Icons.wb_sunny : Icons.cloud,
-                        color: index % 2 == 0 ? Colors.amber : Colors.white,
+                      Image.network(
+                        'https://openweathermap.org/img/wn/${item.iconCode}.png',
+                        width: 40,
+                        height: 40,
+                        errorBuilder: (context, error, stackTrace) => const Icon(Icons.cloud, color: Colors.white),
                       ),
                       Text(
-                        '${24 - (index % 5)}°',
+                        '${item.temperature.round()}°',
                         style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,

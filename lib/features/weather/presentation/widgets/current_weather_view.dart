@@ -1,39 +1,43 @@
 import 'package:flutter/material.dart';
-import '../../../../core/widgets/glass_card.dart';
+import '../../../../core/theme/app_typography.dart';
+import '../../domain/entities/weather_entity.dart';
 
 class CurrentWeatherView extends StatelessWidget {
-  const CurrentWeatherView({super.key});
+  final WeatherEntity weather;
+
+  const CurrentWeatherView({super.key, required this.weather});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Icon(
-          Icons.wb_cloudy_rounded, // Dummy icon
-          size: 120,
-          color: Colors.white,
-        ),
-        const SizedBox(height: 16),
-        Text(
-          '24°',
-          style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontSize: 80,
-              ),
+        Image.network(
+          'https://openweathermap.org/img/wn/${weather.iconCode}@4x.png',
+          width: 150,
+          height: 150,
+          errorBuilder: (context, error, stackTrace) => const SizedBox(
+            width: 150,
+            height: 150,
+            child: Icon(Icons.cloud, size: 100, color: Colors.white),
+          ),
         ),
         Text(
-          'Partly Cloudy',
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Colors.white70,
-              ),
+          '${weather.temperature.round()}°',
+          style: AppTypography.displayLarge.copyWith(color: Colors.white),
+        ),
+        Text(
+          weather.description.toUpperCase(),
+          style: AppTypography.titleLarge.copyWith(
+            color: Colors.white.withOpacity(0.9),
+            letterSpacing: 2,
+          ),
         ),
         const SizedBox(height: 8),
         Text(
-          'H: 28°   L: 18°',
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: Colors.white,
-              ),
+          'H:${weather.tempMax.round()}°  L:${weather.tempMin.round()}°',
+          style: AppTypography.bodyLarge.copyWith(
+            color: Colors.white.withOpacity(0.8),
+          ),
         ),
       ],
     );
