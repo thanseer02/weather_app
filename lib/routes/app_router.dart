@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../features/weather/presentation/screens/home_screen.dart';
 import '../features/weather/presentation/screens/splash_screen.dart';
 
 final appRouter = GoRouter(
@@ -11,9 +12,7 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: '/home',
-      builder: (context, state) => const Scaffold(
-        body: Center(child: Text('Home Screen (Work in Progress)')),
-      ),
+      builder: (context, state) => const HomeScreen(),
     ),
   ],
 );
