@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../di/dependency_injection.dart';
 import 'storage_service.dart';
 import 'notification_service.dart';
+import 'widget_service.dart';
 import '../../features/weather/domain/repositories/weather_repository.dart';
 
 @pragma('vm:entry-point')
@@ -15,7 +16,10 @@ void callbackDispatcher() {
       final storageService = sl<StorageService>();
       final weatherRepository = sl<WeatherRepository>();
       final notificationService = sl<NotificationService>();
+      final widgetService = sl<WidgetService>();
+      
       await notificationService.init();
+      await widgetService.init();
 
       // 2. Fetch last known location
       final location = storageService.getLastLocation();
@@ -34,10 +38,13 @@ void callbackDispatcher() {
       
       weatherResult.fold(
         (failure) {},
-        (weather) {
-          final temp = weather.temperature;
-          final condition = weather.weatherCondition.toLowerCase();
-          final wind = weather.windSpeed;
+        (weather) async {
+          // Push to Home Widgets
+          await widgetService.updateWidgetData(weather: weather.current, location: location);
+
+          final temp = weather.current.temperature;
+          final condition = weather.current.weatherCondition.toLowerCase();
+          final wind = weather.current.windSpeed;
           
           String? alertTitle;
           String? alertBody;

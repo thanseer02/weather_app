@@ -5,6 +5,7 @@ import '../api/api_client.dart';
 import '../services/location_service.dart';
 import '../services/storage_service.dart';
 import '../services/notification_service.dart';
+import '../services/widget_service.dart';
 import '../../features/weather/data/datasources/weather_local_data_source.dart';
 import '../../features/weather/data/datasources/weather_remote_data_source.dart';
 import '../../features/weather/data/repositories/weather_repository_impl.dart';
@@ -22,6 +23,7 @@ Future<void> setupLocator() async {
   sl.registerSingleton<StorageService>(storageService);
   
   sl.registerLazySingleton<NotificationService>(() => NotificationService());
+  sl.registerLazySingleton<WidgetService>(() => WidgetService());
   
   sl.registerLazySingleton(() => LocationService());
 

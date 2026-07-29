@@ -4,6 +4,7 @@ import '../../../../core/di/dependency_injection.dart';
 import '../../domain/entities/weather_entity.dart';
 import '../../domain/repositories/weather_repository.dart';
 import 'location_provider.dart';
+import '../../../../core/services/widget_service.dart';
 
 class WeatherState extends Equatable {
   final WeatherEntity current;
@@ -40,7 +41,10 @@ class WeatherNotifier extends AsyncNotifier<WeatherState> {
       (failure) => throw Exception(failure.message),
       (weather) => forecastResult.fold(
         (failure) => throw Exception(failure.message),
-        (forecast) => WeatherState(current: weather, forecast: forecast),
+        (forecast) {
+          sl<WidgetService>().updateWidgetData(weather: weather, lat: lat, lon: lon);
+          return WeatherState(current: weather, forecast: forecast);
+        },
       ),
     );
   }
